@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg-info/
+.eggs/
+*.egg
+*.log
+*.pot
+*.mo
+*.sqlite3
+
+# Poetry
+poetry.lock
+
+# VSCode
+.vscode/
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+ENV/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+dist/
+build/
+
+# PostgreSQL/pgAdmin
+pgdata/
+pgadmin_data/
+
+# Others
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+
+# Test/coverage
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+pytest_cache/
+
+# PyCharm
+.idea/
+
+# Misc
+*.~*

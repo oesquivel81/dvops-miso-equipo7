@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "email-blacklist-service"
+version = "0.1.0"
+description = "Microservicio Flask para blacklist de emails"
+authors = ["Tu Nombre <tu.email@ejemplo.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+flask = "^3.0.0"
+sqlalchemy = "^2.0.0"
+marshmallow = "^3.20.0"
+marshmallow-sqlalchemy = "^0.29.0"
+dependency-injector = "^4.41.0"
+psycopg2-binary = "^2.9.9"
+python-dotenv = "^1.0.1"
+PyJWT = "^2.8.0"
+flask-sqlalchemy = "^3.1.1"
+requests = "^2.33.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
