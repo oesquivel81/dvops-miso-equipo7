@@ -1,42 +1,16 @@
-from flask import Blueprint, request, jsonify, g
-from marshmallow import ValidationError
-from application.dtos.request.blacklist_request_dto import BlacklistRequestDTO
-
-from application.dtos.response.blacklist_response_dto import BlacklistResponseDTO
-from application.services.blacklist_service import BlacklistService
-from dependency_injector.wiring import inject, Provide
-from infrastructure.container.dependency_container import DependencyContainer
-from uuid import UUID
-from flask import jsonify
+from flask import Blueprint, jsonify
 
 blueprint = Blueprint("blacklist", __name__, url_prefix="/blacklists")
 
-# Health check endpoint para Elastic Beanstalk
-from flask import current_app
-@blueprint.route("/health", methods=["GET"])
-def health():
-    return jsonify({"status": "ok"}), 200
-
-@blueprint.route("/", methods=["POST"])
-@inject
-def add_blacklist(blacklist_service: BlacklistService = Provide[DependencyContainer.blacklist_service]):
-    schema = BlacklistRequestDTO()
-    try:
-        data = schema.load(request.json)
-    except ValidationError as err:
-        return jsonify({"errors": err.messages}), 400
-    try:
-        app_uuid = UUID(data["app_uuid"])
-    except Exception:
-        return jsonify({"errors": {"app_uuid": ["Invalid UUID"]}}), 400
-    ip_address = request.remote_addr or "unknown"
-    blacklist_service.add_to_blacklist(
-        email=data["email"],
-        app_uuid=app_uuid,
-        blocked_reason=data.get("blocked_reason"),
-        ip_address=ip_address
-    )
-    return jsonify({"message": "Email blacklisted"}), 201
+@blueprint.route("/dummy", methods=["GET"])
+def dummy_blacklist():
+    return jsonify({
+        "status": "ok",
+        "data": [
+            {"email": "test@example.com", "blacklisted": True},
+            {"email": "foo@bar.com", "blacklisted": False}
+        ]
+    })
 
 @blueprint.route("/<string:email>", methods=["GET"])
 @inject
