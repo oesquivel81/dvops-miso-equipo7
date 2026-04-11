@@ -11,6 +11,12 @@ from flask import jsonify
 
 blueprint = Blueprint("blacklist", __name__, url_prefix="/blacklists")
 
+# Health check endpoint para Elastic Beanstalk
+from flask import current_app
+@blueprint.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
+
 @blueprint.route("/", methods=["POST"])
 @inject
 def add_blacklist(blacklist_service: BlacklistService = Provide[DependencyContainer.blacklist_service]):
