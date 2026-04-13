@@ -20,6 +20,11 @@ def get_all_blacklist():
         "data": blacklist_service.repository.get_all()
     })
 
+@dummy_blueprint.route("/all-one", methods=["GET"])
+def get_all_blacklist():
+    # 
+    raise Exception("Error al obtener la blacklist")
+
 @dummy_blueprint.route("/<string:email>", methods=["GET"])
 def get_blacklist(email):
     result = blacklist_service.get_blacklist(email)

@@ -1,68 +1,231 @@
 {
   "info": {
-    "name": "Blacklist Email Microservice",
-    "description": "Colección para probar todos los endpoints del microservicio de blacklist de emails.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "_postman_id": "869e7286-b605-4ff3-b215-35967838100e",
+    "name": "blacklist_postman_collection",
+    "description": "# Documentación de Endpoints Blacklist\n\n## Seguridad\nTodas las rutas requieren el header:\n\n    Authorization: Bearer fixedtoken\n\n## Endpoints principales\n\n### 1. Obtener lista de emails en blacklist\n- **GET /blacklists**\n- Devuelve todos los emails en la blacklist.\n\n### 2. Buscar email en blacklist\n- **GET /blacklists/<email>**\n- Devuelve si el email está en blacklist y el motivo.\n\n### 3. Crear email en blacklist\n- **POST /blacklists**\n- Cuerpo (JSON):\n    {\n        \"email\": \"test@example.com\",\n        \"app_uuid\": \"uuid-app\",\n        \"blocked_reason\": \"motivo opcional\"\n    }\n- Respuesta: email registrado en blacklist.\n\n### 4. Ejemplo de uso con curl\n\nPOST:\n    curl -X POST http://localhost:5000/blacklists/ -H 'Authorization: Bearer fixedtoken' -H 'Content-Type: application/json' -d '{"email": "test@example.com", "app_uuid": "123e4567-e89b-12d3-a456-426614174000", "blocked_reason": "spam"}'\n\nGET:\n    curl -X GET http://localhost:5000/blacklists/test@example.com -H 'Authorization: Bearer fixedtoken'\n\nPara más detalles, consulta el README del proyecto.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33854284"
   },
   "item": [
     {
-      "name": "Agregar email a blacklist",
+      "name": "Test-trafico-estrategia",
+      "item": [
+        {
+          "name": "Lista de Emails",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const code = pm.response.code;\r",
+                  "const previous = pm.collectionVariables.get(\"previous_code\");\r",
+                  "\r",
+                  "let total = Number(pm.collectionVariables.get(\"total\") || 0);\r",
+                  "let ok = Number(pm.collectionVariables.get(\"ok\") || 0);\r",
+                  "let fail = Number(pm.collectionVariables.get(\"fail\") || 0);\r",
+                  "\r",
+                  "total += 1;\r",
+                  "\r",
+                  "if (code >= 200 && code < 300) {\r",
+                  "    ok += 1;\r",
+                  "} else {\r",
+                  "    fail += 1;\r",
+                  "}\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"total\", total);\r",
+                  "pm.collectionVariables.set(\"ok\", ok);\r",
+                  "pm.collectionVariables.set(\"fail\", fail);\r",
+                  "pm.collectionVariables.set(\"previous_code\", code);\r",
+                  "\r",
+                  "pm.test(\"Respuesta aceptada para prueba de despliegue\", function () {\r",
+                  "    pm.expect([200, 500, 502, 503, 504]).to.include(code);\r",
+                  "});\r",
+                  "\r",
+                  "if (previous && Number(previous) !== code) {\r",
+                  "    console.log(`Cambio detectado: ${previous} -> ${code}`);\r",
+                  "}\r",
+                  "\r",
+                  "console.log(\"Iteración:\", total);\r",
+                  "console.log(\"HTTP:\", code);\r",
+                  "console.log(\"OK acumulados:\", ok);\r",
+                  "console.log(\"FAIL acumulados:\", fail);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists",
+              "protocol": "http",
+              "host": [
+                "app-blacklist-email",
+                "eba-f7ifrwmu",
+                "us-east-2",
+                "elasticbeanstalk",
+                "com"
+              ],
+              "path": [
+                "blacklists"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "const code = pm.response.code;\r",
+              "const previous = pm.collectionVariables.get(\"previous_code\");\r",
+              "\r",
+              "let total = Number(pm.collectionVariables.get(\"total\") || 0);\r",
+              "let ok = Number(pm.collectionVariables.get(\"ok\") || 0);\r",
+              "let fail = Number(pm.collectionVariables.get(\"fail\") || 0);\r",
+              "\r",
+              "total += 1;\r",
+              "\r",
+              "if (code >= 200 && code < 300) {\r",
+              "    ok += 1;\r",
+              "} else {\r",
+              "    fail += 1;\r",
+              "}\r",
+              "\r",
+              "pm.collectionVariables.set(\"total\", total);\r",
+              "pm.collectionVariables.set(\"ok\", ok);\r",
+              "pm.collectionVariables.set(\"fail\", fail);\r",
+              "pm.collectionVariables.set(\"previous_code\", code);\r",
+              "\r",
+              "pm.test(\"Respuesta aceptada para prueba de despliegue\", function () {\r",
+              "    pm.expect([200, 500, 502, 503, 504]).to.include(code);\r",
+              "});\r",
+              "\r",
+              "if (previous && Number(previous) !== code) {\r",
+              "    console.log(`Cambio detectado: ${previous} -> ${code}`);\r",
+              "}\r",
+              "\r",
+              "console.log(\"Iteración:\", total);\r",
+              "console.log(\"HTTP:\", code);\r",
+              "console.log(\"OK acumulados:\", ok);\r",
+              "console.log(\"FAIL acumulados:\", fail);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lista de Emails",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists",
+          "protocol": "http",
+          "host": [
+            "app-blacklist-email",
+            "eba-f7ifrwmu",
+            "us-east-2",
+            "elasticbeanstalk",
+            "com"
+          ],
+          "path": [
+            "blacklists"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Busqueda por email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists/inmutable@ejemplo.com",
+          "protocol": "http",
+          "host": [
+            "app-blacklist-email",
+            "eba-f7ifrwmu",
+            "us-east-2",
+            "elasticbeanstalk",
+            "com"
+          ],
+          "path": [
+            "blacklists",
+            "inmutable@ejemplo.com"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creacion de email",
       "request": {
         "method": "POST",
-        "header": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Authorization", "value": "Bearer fixedtoken" }
-        ],
+        "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"email\": \"test@example.com\",\n  \"app_uuid\": \"123e4567-e89b-12d3-a456-426614174000\",\n  \"blocked_reason\": \"spam\"\n}"
+          "raw": "{\r\n    \"email\": \"inmutable3@ejemplo.com\",\r\n    \"blacklisted\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": {
-          "raw": "http://localhost:5000/blacklists/",
+          "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists",
           "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["blacklists", ""]
-        },
-        "description": "Agrega un email a la blacklist.\n\nCampos requeridos:\n- email (string, obligatorio)\n- app_uuid (UUID, obligatorio)\n- blocked_reason (string, opcional, máx 255)"
+          "host": [
+            "app-blacklist-email",
+            "eba-f7ifrwmu",
+            "us-east-2",
+            "elasticbeanstalk",
+            "com"
+          ],
+          "path": [
+            "blacklists"
+          ]
+        }
       },
       "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "total",
+      "value": ""
     },
     {
-      "name": "Consultar email en blacklist (existe)",
-      "request": {
-        "method": "GET",
-        "header": [
-          { "key": "Authorization", "value": "Bearer fixedtoken" }
-        ],
-        "url": {
-          "raw": "http://localhost:5000/blacklists/test@example.com",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["blacklists", "test@example.com"]
-        },
-        "description": "Consulta si un email está en la blacklist y muestra el motivo si existe."
-      },
-      "response": []
+      "key": "ok",
+      "value": ""
     },
     {
-      "name": "Consultar email en blacklist (no existe)",
-      "request": {
-        "method": "GET",
-        "header": [
-          { "key": "Authorization", "value": "Bearer fixedtoken" }
-        ],
-        "url": {
-          "raw": "http://localhost:5000/blacklists/notfound@example.com",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["blacklists", "notfound@example.com"]
-        },
-        "description": "Consulta un email que no está en la blacklist. Debe responder exists: false o 404."
-      },
-      "response": []
+      "key": "fail",
+      "value": ""
+    },
+    {
+      "key": "previous_code",
+      "value": ""
     }
   ]
 }
