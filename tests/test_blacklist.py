@@ -4,7 +4,7 @@ import sys
 import os
 
 # Asegurar que el root del proyecto esté en el path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import health as health_module
 from health import app
