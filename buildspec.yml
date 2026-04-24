@@ -7,40 +7,32 @@ env:
 
 phases:
   install:
-    runtime-versions:
-      python: 3.11
     commands:
       - echo "=== Instalando dependencias ==="
-      - pip install --upgrade pip
-      - pip install -r requirements.txt
-      - pip install pytest pytest-cov
+      - python3 --version
+      - pip3 install --upgrade pip
+      - pip3 install poetry
+      - poetry config virtualenvs.create false
 
   pre_build:
     commands:
-      - echo "=== Verificando version de Python ==="
-      - python --version
-      - echo "=== Verificando dependencias instaladas ==="
-      - pip list
+      - echo "=== Instalando paquetes del proyecto ==="
+      - poetry install --no-interaction --no-root
 
   build:
     commands:
       - echo "=== Ejecutando pruebas unitarias ==="
-      - python -m pytest tests/ -v --junitxml=test-results.xml --cov=. --cov-report=xml:coverage.xml --cov-report=term
+      - poetry run pytest tests/ -v --junitxml=test-results.xml
 
   post_build:
     commands:
       - echo "=== Build finalizado ==="
-      - echo "Resultado de pruebas guardado en test-results.xml"
 
 reports:
   pytest-results:
     files:
       - test-results.xml
     file-format: JUNITXML
-  coverage-results:
-    files:
-      - coverage.xml
-    file-format: COBERTURAXML
 
 artifacts:
   files:
