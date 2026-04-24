@@ -38,6 +38,7 @@ Thumbs.db
 *.pid
 dist/
 build/
+/task/
 
 # PostgreSQL/pgAdmin
 pgdata/

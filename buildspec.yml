@@ -1,0 +1,53 @@
+version: 0.2
+
+env:
+  variables:
+    PYTHONDONTWRITEBYTECODE: "1"
+    PYTHONUNBUFFERED: "1"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "=== Instalando dependencias ==="
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+      - pip install pytest pytest-cov
+
+  pre_build:
+    commands:
+      - echo "=== Verificando version de Python ==="
+      - python --version
+      - echo "=== Verificando dependencias instaladas ==="
+      - pip list
+
+  build:
+    commands:
+      - echo "=== Ejecutando pruebas unitarias ==="
+      - python -m pytest tests/ -v --junitxml=test-results.xml --cov=. --cov-report=xml:coverage.xml --cov-report=term
+
+  post_build:
+    commands:
+      - echo "=== Build finalizado ==="
+      - echo "Resultado de pruebas guardado en test-results.xml"
+
+reports:
+  pytest-results:
+    files:
+      - test-results.xml
+    file-format: JUNITXML
+  coverage-results:
+    files:
+      - coverage.xml
+    file-format: COBERTURAXML
+
+artifacts:
+  files:
+    - "**/*"
+  exclude-paths:
+    - "task/**"
+    - "**/__pycache__/**"
+    - "**/*.pyc"
+    - ".pytest_cache/**"
+  name: blacklist-service-artifact
