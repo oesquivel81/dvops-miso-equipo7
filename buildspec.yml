@@ -4,25 +4,31 @@ env:
   variables:
     PYTHONDONTWRITEBYTECODE: "1"
     PYTHONUNBUFFERED: "1"
+    PYTHONPATH: "."
 
 phases:
   install:
     commands:
       - echo "=== Instalando dependencias ==="
       - python3 --version
+      - pip3 --version
       - pip3 install --upgrade pip
       - pip3 install poetry
       - poetry config virtualenvs.create false
 
   pre_build:
     commands:
+      - echo "=== Activando Python compatible ==="
+      - pyenv shell 3.12.13
+      - python --version
       - echo "=== Instalando paquetes del proyecto ==="
       - poetry install --no-interaction --no-root
 
   build:
     commands:
       - echo "=== Ejecutando pruebas unitarias ==="
-      - python3.12 -m pytest tests/ -v --junitxml=test-results.xml
+      - pyenv shell 3.12.13
+      - poetry run pytest tests/ -v --junitxml=test-results.xml
 
   post_build:
     commands:
