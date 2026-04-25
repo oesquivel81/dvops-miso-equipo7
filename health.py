@@ -47,4 +47,4 @@ app.register_blueprint(dummy_blueprint)
 # Endpoint health
 @app.route("/health")
 def health():
-    return "Hola grupo 7", 200
+    return "healthy", 200
