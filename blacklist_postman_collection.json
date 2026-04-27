@@ -60,12 +60,11 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists",
+              "raw": "http://cd-beanstalk-app.us-east-1.elasticbeanstalk.com/blacklists",
               "protocol": "http",
               "host": [
-                "app-blacklist-email",
-                "eba-f7ifrwmu",
-                "us-east-2",
+                "cd-beanstalk-app",
+                "us-east-1",
                 "elasticbeanstalk",
                 "com"
               ],
@@ -161,19 +160,18 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists/inmutable@ejemplo.com",
-          "protocol": "http",
-          "host": [
-            "app-blacklist-email",
-            "eba-f7ifrwmu",
-            "us-east-2",
-            "elasticbeanstalk",
-            "com"
-          ],
-          "path": [
-            "blacklists",
-            "inmutable@ejemplo.com"
-          ]
+              "raw": "http://cd-beanstalk-app.us-east-1.elasticbeanstalk.com/blacklists/inmutable@ejemplo.com",
+              "protocol": "http",
+              "host": [
+                "cd-beanstalk-app",
+                "us-east-1",
+                "elasticbeanstalk",
+                "com"
+              ],
+              "path": [
+                "blacklists",
+                "inmutable@ejemplo.com"
+              ]
         }
       },
       "response": []
@@ -193,18 +191,17 @@
           }
         },
         "url": {
-          "raw": "http://app-blacklist-email.eba-f7ifrwmu.us-east-2.elasticbeanstalk.com/blacklists",
-          "protocol": "http",
-          "host": [
-            "app-blacklist-email",
-            "eba-f7ifrwmu",
-            "us-east-2",
-            "elasticbeanstalk",
-            "com"
-          ],
-          "path": [
-            "blacklists"
-          ]
+              "raw": "http://cd-beanstalk-app.us-east-1.elasticbeanstalk.com/blacklists",
+              "protocol": "http",
+              "host": [
+                "cd-beanstalk-app",
+                "us-east-1",
+                "elasticbeanstalk",
+                "com"
+              ],
+              "path": [
+                "blacklists"
+              ]
         }
       },
       "response": []
