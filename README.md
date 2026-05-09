@@ -71,3 +71,5 @@ Invoke-RestMethod -Uri "http://localhost:5000/blacklists/test@example.com" -Meth
 - El backend usa logging para debug y errores
 - El archivo .gitignore excluye cachés, entornos y archivos locales
 - Puedes extender la lógica agregando más endpoints o reglas de negocio
+
+#Cambio
