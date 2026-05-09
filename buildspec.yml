@@ -2,35 +2,45 @@ version: 0.2
 
 env:
   variables:
-    PYTHONDONTWRITEBYTECODE: "1"
-    PYTHONUNBUFFERED: "1"
-    PYTHONPATH: "."
+    AWS_DEFAULT_REGION: "us-east-1"
+    AWS_ACCOUNT_ID: "269174115208"
+    IMAGE_REPO_NAME: "blacklist-service"
+    CONTAINER_NAME: "blacklist-service"
+    CONTAINER_PORT: "5000"
 
 phases:
   install:
     commands:
-      - echo "=== Configurando Python 3.12.13 ==="
-      - export PY312="/root/.pyenv/versions/3.12.13/bin/python"
-      - $PY312 --version
-      - $PY312 -m pip install --upgrade pip
-      - $PY312 -m pip install poetry
-      - $PY312 -m poetry config virtualenvs.create false
+      - echo "=== Instalando dependencias para pruebas ==="
+      - python3 --version
+      - pip3 install --upgrade pip
+      - pip3 install -r requirements.txt
 
   pre_build:
     commands:
-      - echo "=== Instalando paquetes del proyecto ==="
-      - export PY312="/root/.pyenv/versions/3.12.13/bin/python"
-      - $PY312 -m poetry install --no-interaction --no-root
+      - echo "=== Ejecutando pruebas unitarias ==="
+      - pytest tests/ -v --junitxml=test-results.xml
+      - echo "=== Login a ECR ==="
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
+      - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
 
   build:
     commands:
-      - echo "=== Ejecutando pruebas unitarias ==="
-      - export PY312="/root/.pyenv/versions/3.12.13/bin/python"
-      - $PY312 -m poetry run pytest tests/ -v --junitxml=test-results.xml
+      - echo "=== Construyendo imagen Docker ==="
+      - docker build -t $IMAGE_REPO_NAME .
+      - docker tag $IMAGE_REPO_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag $IMAGE_REPO_NAME:latest $REPOSITORY_URI:latest
 
   post_build:
     commands:
-      - echo "=== Build finalizado ==="
+      - echo "=== Subiendo imagen a ECR ==="
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:latest
+      - echo "=== Generando imageDetail.json ==="
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+      - echo "=== Generando imagedefinitions.json ==="
+      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 reports:
   pytest-results:
@@ -40,10 +50,8 @@ reports:
 
 artifacts:
   files:
-    - "**/*"
-  exclude-paths:
-    - "task/**"
-    - "**/__pycache__/**"
-    - "**/*.pyc"
-    - ".pytest_cache/**"
-  name: blacklist-service-artifact
+    - imageDetail.json
+    - imagedefinitions.json
+    - appspec.json
+    - taskdef.json
+    - test-results.xml
