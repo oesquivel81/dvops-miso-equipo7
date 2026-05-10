@@ -4,8 +4,8 @@ env:
   variables:
     AWS_DEFAULT_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "269174115208"
-    IMAGE_REPO_NAME: "blacklist-servicess"
-    CONTAINER_NAME: "blacklist-services"
+    IMAGE_REPO_NAME: "blacklist-service"
+    CONTAINER_NAME: "blacklist-service"
     CONTAINER_PORT: "5000"
 
 phases:
