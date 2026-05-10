@@ -15,4 +15,4 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 EXPOSE 5000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "health_wrong:app"]
+CMD ["gunicorn"]
