@@ -14,5 +14,6 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 EXPOSE 5000
+EXPOSE 17281A
 
-CMD ["gunicorn"]
+CMD ["gunicorn","--bind", "0.0.0.0:5000", "health:app"]
